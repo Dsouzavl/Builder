@@ -11,11 +11,11 @@ O padrão _Builder_ deve ser utilizado quando você possui um objeto muito compl
 ```csharp
  public class PaymentTransaction
     {
-        public Guid TransactionKey;
+        public Guid TransactionKey { get; set; }
 
-        public DateTime TransactionOccurenceDate;
+        public DateTime TransactionOccurenceDate { get; set; }
 
-        public string TransactionType;
+        public string TransactionType { get; set; }
 
         public PaymentTransaction(Guid transactionKey, DateTime transactionOccurenceDate, string transactionType){
             this.TransactionKey = TransactionKey;
