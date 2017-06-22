@@ -4,28 +4,28 @@
 
 Estamos chegando quase ao último artigo em relação ao padrões de projeto criacionais ( _não fique triste_ ), nesse artigo vou explicar o padrão _Builder_, o seu melhor amigo na hora de construir objetos complexos.
 
-O padrão _Builder_ deve ser utilizado quando você possui um objeto muito complexo de construir, através dele, sua construção será levada do construtor da classe, para uma outra classe responsável por construir e devolver seu objeto, onde será possível inccluir uma certa lógica na hora da construção, isso te lembra o [_Factory method_](https://github.com/Dsouzavl/Factory-method) correto? Sim, pode até ser, mas eles não são iguais, enquanto através do _Factory method_ você pode escolher qual objeto quer retornar, no _Builder_ ele cria e retorna apenas um objeto específico, fora que suas motivações são totalmente diferentes. Todo _Builder_ retorna o objeto complexo específico para o qual ele foi criado esse sempre será seu cliente, um exemplo de objeto complexo pode ser, um objeto que tem muitos parâmetros no seu construtor, e também não podemos definir como propriedades e altera-lás após instânciarmos o objeto, pois o risco de termos objetos incompletos é muito grande. Mantenha sempre em mente, _Builder_ é para ser usado para construir objetos complexos, esse é o foco do padrão. 
+O padrão _Builder_ deve ser utilizado quando você possui um objeto muito complexo de construir, através dele, sua construção será levada do construtor da classe, para uma outra classe responsável por construir e devolver seu objeto, onde será possível incluir uma certa lógica na hora da construção, isso te lembra o [_Factory method_](https://github.com/Dsouzavl/Factory-method) correto? Sim, pode até ser, mas eles não são iguais, enquanto através do _Factory method_ você pode escolher qual objeto quer retornar, no _Builder_ ele cria e retorna apenas um objeto específico, fora que suas motivações são totalmente diferentes. Todo _Builder_ retorna o objeto complexo específico para o qual ele foi criado esse sempre será seu cliente, um exemplo de objeto complexo pode ser, um objeto que tem muitos parâmetros no seu construtor, e também não podemos definir como propriedades e altera-lás após instânciarmos o objeto, pois o risco de termos objetos incompletos é muito grande. Mantenha sempre em mente, _Builder_ é para ser usado para construir objetos complexos, esse é o foco do padrão. 
 
 ### _Recomendo olhar o código fonte para poder analisar com mais cautela a arquitetura do padrão Builder_
 
 ```csharp
  public class PaymentTransaction
     {
-        public Guid TransactionId;
+        public Guid TransactionKey;
 
         public DateTime TransactionOccurenceDate;
 
         public string TransactionType;
 
-        public PaymentTransaction(Guid transactionId, DateTime transactionOccurenceDate, string transactionType){
-            this.TransactionId = transactionId;
+        public PaymentTransaction(Guid transactionKey, DateTime transactionOccurenceDate, string transactionType){
+            this.TransactionKey = TransactionKey;
             this.TransactionOccurenceDate = transactionOccurenceDate;
             this.TransactionType = transactionType
         }
 
         public void DisplayTransaction()
         {
-            Console.WriteLine($@"TransactionId: {TransactionId}  
+            Console.WriteLine($@"TransactionKey: {TransactionKey}  
                               Transaction occurence date {TransactionOccurenceDate} 
                               Transaction type {TransactionType} 
                                 ");
@@ -50,17 +50,17 @@ Tudo bem, não parece que nossa classe é tão complexa de construir, mas é ape
             transaction = new PaymentTransaction();
         }
 
-        public abstract void CatchTransactionId();
+        public abstract void CatchTransactionKey();
         public abstract void CatchTransactionOccurenceDate();
         public abstract void CheckTransactionType();
     }
 ```
-Okay, parece ótimo, temos uma abstração de um _Builder_ que cria, retorna e compõe o nosso objeto, ao invés de passarmos paramêtros para o construtor, adicionaremos suas valores através dos métodos para pegar a transactionId, a data de ocorrência da transação e o tipo de transação que é.
+Okay, parece ótimo, temos uma abstração de um _Builder_ que cria, retorna e compõe o nosso objeto, ao invés de passarmos paramêtros para o construtor, adicionaremos suas valores através dos métodos para pegar a TransactionKey, a data de ocorrência da transação e o tipo de transação que é.
 
 ```csharp
 public class CreditTransactionBuilder : PaymentTransactionBuilder {
-        public override void CatchTransactionId() {
-           this.transaction.TransactionId = Guid.NewGuid();
+        public override void CatchTransactionKey() {
+           this.transaction.TransactionKey = Guid.NewGuid();
         }
 
         public override void CatchTransactionOccurenceDate() {
@@ -84,7 +84,7 @@ public class CreditTransactionBuilder : PaymentTransactionBuilder {
 
         public void ConstructPaymentTransaction() {
             _builder.CreatePaymentTransaction();
-            _builder.CatchTransactionId();
+            _builder.CatchTransactionKey();
             _builder.CatchTransactionOccurenceDate();
             _builder.CheckTransactionType();
         }
